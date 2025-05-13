@@ -1,12 +1,14 @@
 import './App.css'
 import Home from './pages/home/home'
 import { generateToken, messaging } from './notifications/firebase'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { onMessage } from 'firebase/messaging';
 function App() {
-
+  const [token, setToken] = useState<string | null>(null);
   useEffect(() => {
-    generateToken();
+    generateToken().then((token) => {
+      setToken(token || null);
+    });
     onMessage(messaging, (payload) => {
       console.log(payload)
     })
@@ -15,6 +17,7 @@ function App() {
   return (
     <>
       <Home />
+      <div>{token}</div>
     </>
   )
 }
